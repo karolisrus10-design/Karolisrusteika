@@ -1,0 +1,15 @@
+# Normalise text files to LF in the repo; let Git handle working-tree EOLs.
+* text=auto eol=lf
+
+# Treat media/binary assets as binary (no EOL conversion, no diffs).
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.svg  text
+*.mp3  binary
+*.mp4  binary
+*.webm binary
+*.glb  binary
+*.woff2 binary

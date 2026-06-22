@@ -1,0 +1,89 @@
+.layer {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(240px, 30vw, 360px);
+  height: 100%;
+  z-index: 60;                 /* in front of the 3D canvas, behind the corner controls */
+  overflow: hidden;
+  pointer-events: none;        /* gaps let clicks fall through; cards re-enable it */
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.layer.visible { opacity: 1; }
+.layer:not(.visible) .card { pointer-events: none; }
+
+.track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(70px, 12vh, 150px);
+  will-change: transform;
+}
+
+.card {
+  position: relative;
+  pointer-events: auto;
+  flex: 0 0 auto;
+  width: clamp(210px, 27vw, 320px);
+  height: clamp(140px, 17vw, 200px);
+  border-radius: 20px;
+  overflow: hidden;
+  /* Dark neon-glass tile to match the cinematic page style */
+  background:
+    radial-gradient(130% 100% at 0% 0%, rgba(var(--card-glow), 0.22) 0%, transparent 55%),
+    linear-gradient(158deg, rgba(11, 15, 33, 0.92) 0%, rgba(5, 8, 19, 0.85) 100%);
+  border: 1.5px solid rgba(var(--card-glow), 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow:
+    0 16px 50px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(var(--card-glow), 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 34px rgba(var(--card-glow), 0.08);
+  transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+/* Glass sheen across the top */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 55% 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent);
+  pointer-events: none;
+}
+.card:hover {
+  transform: scale(1.05);
+  border-color: rgba(var(--card-glow), 0.95);
+  box-shadow:
+    0 22px 64px rgba(0, 0, 0, 0.6),
+    0 0 52px rgba(var(--card-glow), 0.72),
+    inset 0 0 40px rgba(var(--card-glow), 0.14);
+}
+.card:active { transform: scale(0.98); }
+
+.cardLabel {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 40px);
+  letter-spacing: -0.01em;
+  color: var(--warm-white);
+  text-shadow:
+    0 0 11px rgba(var(--card-glow), 0.85),
+    0 0 26px rgba(var(--card-glow), 0.5);
+}
+
+.websites { --card-color: #7C4DFF; --card-glow: 124, 77, 255; }
+.basic    { --card-color: #FF5A5F; --card-glow: 255, 90, 95; }
+.hyper    { --card-color: #2979FF; --card-glow: 41, 121, 255; }
+
+@media (max-width: 600px) {
+  .layer { width: 76vw; }
+}

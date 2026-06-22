@@ -1,0 +1,91 @@
+.soundBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 24px;
+  z-index: 100;
+  width: clamp(104px, 12vw, 140px);
+  height: clamp(104px, 12vw, 140px);
+  padding: 0;
+  background: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.15s ease;
+  transform-origin: bottom left;
+}
+
+.soundBtn.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.emblem {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 5px rgba(120, 90, 220, 0.7))
+    drop-shadow(0 0 14px rgba(60, 95, 235, 0.4));
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+
+.spokes {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0.55;
+}
+
+.bar {
+  fill: #f4f0ea;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* --- Playing: bars bounce, spokes slowly rotate, brighter glow --- */
+.playing .emblem {
+  filter:
+    drop-shadow(0 0 6px rgba(255, 120, 160, 0.8))
+    drop-shadow(0 0 16px rgba(60, 95, 235, 0.6));
+}
+.playing .spokes {
+  animation: soundSpin 22s linear infinite;
+}
+.playing .bar {
+  animation: eqBounce 0.85s ease-in-out infinite;
+}
+/* Stagger each bar so the equalizer reads as organic, not synced */
+.playing .bar:nth-child(1) { animation-duration: 0.78s; animation-delay: -0.30s; }
+.playing .bar:nth-child(2) { animation-duration: 0.96s; animation-delay: -0.62s; }
+.playing .bar:nth-child(3) { animation-duration: 0.70s; animation-delay: -0.10s; }
+.playing .bar:nth-child(4) { animation-duration: 1.04s; animation-delay: -0.48s; }
+.playing .bar:nth-child(5) { animation-duration: 0.88s; animation-delay: -0.22s; }
+
+/* --- Muted: bars collapse to a flat centre line, dimmer --- */
+.muted .emblem { opacity: 0.78; }
+.muted .bar {
+  transform: scaleY(0.1);
+  transition: transform 0.4s ease;
+}
+
+/* --- Press: bright flare + squash --- */
+.soundBtn:active { transform: scale(0.95); }
+.soundBtn:active .emblem {
+  filter:
+    drop-shadow(0 0 9px rgba(255, 120, 160, 0.95))
+    drop-shadow(0 0 24px rgba(120, 90, 240, 0.8))
+    drop-shadow(0 0 44px rgba(60, 95, 235, 0.5));
+}
+
+@keyframes eqBounce {
+  0%, 100% { transform: scaleY(0.32); }
+  50%      { transform: scaleY(1.25); }
+}
+
+@keyframes soundSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  .soundBtn { bottom: 12px; left: 12px; }
+}

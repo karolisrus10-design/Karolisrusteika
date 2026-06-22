@@ -1,0 +1,173 @@
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/fonts/NeueMontreal.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'EditorialNew';
+  src: url('/fonts/EditorialNew.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --blue: #1E2DBE;
+  --crimson: #E84A5F;
+  --warm-white: #F4F0EA;
+  --bg: #040720;
+  --font-display: 'NeueMontreal', 'Inter', 'Helvetica Neue', sans-serif;
+  --font-editorial: 'EditorialNew', 'Georgia', serif;
+  --font-mono: 'Courier New', 'Courier', monospace;
+
+  /* ---- Vibe palette (BASIC by default) ---- *
+     Atmosphere + accents are driven by these so a vibe swap restyles the whole
+     scene. Colours are RGB triplets so they can be used at any alpha. */
+  --vibe-bg: #040720;
+  --vibe-deep: #070d2c;
+  --vibe-edge: #02030e;
+  --vibe-glow-rgb: 40, 65, 215;     /* primary glow (blue) */
+  --vibe-glow2-rgb: 70, 110, 245;   /* secondary glow (brighter blue) */
+  --vibe-accent-rgb: 232, 74, 95;   /* accent (crimson) */
+  --vibe-text: #F4F0EA;
+}
+
+/* LUXURY — cinematic, premium: deep blue glow + soft gold accent */
+:root[data-vibe="luxury"] {
+  --vibe-bg: #040720;
+  --vibe-deep: #0D1B3D;
+  --vibe-edge: #020412;
+  --vibe-glow-rgb: 28, 48, 104;
+  --vibe-glow2-rgb: 40, 66, 132;
+  --vibe-accent-rgb: 198, 169, 114; /* #C6A972 gold */
+  --vibe-text: #F5F1E8;
+}
+
+/* PHONK — dark, aggressive: deep crimson + neon red */
+:root[data-vibe="phonk"] {
+  --vibe-bg: #050505;
+  --vibe-deep: #1a0509;
+  --vibe-edge: #000000;
+  --vibe-glow-rgb: 120, 18, 36;     /* lifted #5B0A18 so it reads as a glow */
+  --vibe-glow2-rgb: 215, 38, 61;    /* #D7263D neon red */
+  --vibe-accent-rgb: 215, 38, 61;   /* #D7263D neon red */
+  --vibe-text: #CFCFCF;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--warm-white);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+  background: var(--vibe-bg);
+  transition: background-color 0.7s ease;
+}
+
+/* Atmospheric background, driven by the active vibe's palette. Soft colour pools
+   sit under each corner control so the neon reads as embedded in the scene, and a
+   central glow seats the 3D object in light. The 3D canvas has alpha, so this shows
+   through everywhere the object isn't. */
+#root {
+  background:
+    radial-gradient(120% 90% at 50% 44%, rgba(var(--vibe-glow-rgb), 0.24) 0%, rgba(var(--vibe-glow-rgb), 0) 48%),
+    radial-gradient(46% 52% at 93% 12%, rgba(var(--vibe-accent-rgb), 0.22) 0%, rgba(var(--vibe-accent-rgb), 0) 70%),
+    radial-gradient(52% 64% at 1% 50%, rgba(var(--vibe-glow2-rgb), 0.20) 0%, rgba(var(--vibe-accent-rgb), 0.08) 42%, transparent 76%),
+    radial-gradient(58% 62% at 99% 93%, rgba(var(--vibe-glow2-rgb), 0.22) 0%, rgba(var(--vibe-accent-rgb), 0.11) 46%, transparent 82%),
+    radial-gradient(120% 120% at 50% 50%, var(--vibe-deep) 0%, var(--vibe-bg) 58%, var(--vibe-edge) 100%);
+}
+
+/* Cinematic flash that masks the (instant) gradient swap when the vibe changes.
+   Rendered with key={vibe} in React so it replays on each switch. */
+.vibe-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(var(--vibe-accent-rgb), 0.4) 0%,
+    rgba(var(--vibe-glow2-rgb), 0.25) 45%,
+    transparent 78%);
+  animation: vibeFlash 0.85s ease-out forwards;
+}
+@keyframes vibeFlash {
+  0%   { opacity: 0; }
+  35%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+/* Faint star field for depth (kept subtle; the grain layer adds the rest). */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='40' cy='80' r='0.8' opacity='0.5'/%3E%3Ccircle cx='140' cy='220' r='0.6' opacity='0.35'/%3E%3Ccircle cx='260' cy='60' r='0.7' opacity='0.45'/%3E%3Ccircle cx='320' cy='300' r='0.5' opacity='0.3'/%3E%3Ccircle cx='480' cy='140' r='0.8' opacity='0.5'/%3E%3Ccircle cx='560' cy='360' r='0.6' opacity='0.35'/%3E%3Ccircle cx='90' cy='420' r='0.7' opacity='0.4'/%3E%3Ccircle cx='210' cy='520' r='0.5' opacity='0.3'/%3E%3Ccircle cx='420' cy='480' r='0.7' opacity='0.4'/%3E%3Ccircle cx='540' cy='540' r='0.5' opacity='0.3'/%3E%3Ccircle cx='30' cy='300' r='0.5' opacity='0.3'/%3E%3Ccircle cx='370' cy='180' r='0.6' opacity='0.35'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 600px 600px;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  color: var(--warm-white);
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Visible keyboard focus states (not shown for mouse users) */
+:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Skip link — hidden until focused, then visible top-left */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10000;
+  padding: 10px 16px;
+  background: var(--blue);
+  color: var(--warm-white);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  transform: translateY(-150%);
+  transition: transform 0.2s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
