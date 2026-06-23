@@ -3,3 +3,25 @@
   inset: 0;
   z-index: 0;
 }
+
+/* Shown when WebGL is unavailable or the 3D scene errors out. */
+.fallbackOrb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(46vmin, 460px);
+  height: min(46vmin, 460px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%,
+    rgba(170, 195, 255, 0.92) 0%,
+    rgba(60, 95, 230, 0.55) 34%,
+    rgba(232, 74, 95, 0.32) 62%,
+    transparent 78%);
+  filter: blur(8px);
+  animation: orbPulse 5.5s ease-in-out infinite;
+}
+@keyframes orbPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50%      { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
+}

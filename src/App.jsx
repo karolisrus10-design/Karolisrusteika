@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Loader from './components/Loader/Loader.jsx'
-import HeroScene from './components/HeroScene/HeroScene.jsx'
+import HeroScene, { HeroFallback } from './components/HeroScene/HeroScene.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MenuButton from './components/Menu/MenuButton.jsx'
 import MenuOverlay from './components/Menu/MenuOverlay.jsx'
 import SoundButton from './components/SoundButton/SoundButton.jsx'
@@ -140,11 +141,13 @@ export default function App() {
       {!loaded && <Loader onComplete={handleLoadComplete} />}
 
       <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.8s ease', width: '100%', height: '100%' }}>
-        <HeroScene
-          soundOn={soundOn}
-          analyser={analyserRef.current}
-          dimmed={menuOpen || reelOpen || !!cardModal || !!activePanel}
-        />
+        <ErrorBoundary fallback={<HeroFallback dimmed={menuOpen || reelOpen || !!cardModal || !!activePanel} />}>
+          <HeroScene
+            soundOn={soundOn}
+            analyser={analyserRef.current}
+            dimmed={menuOpen || reelOpen || !!cardModal || !!activePanel}
+          />
+        </ErrorBoundary>
 
         <FallingCards
           visible={loaded && !menuOpen && !reelOpen && !cardModal && !activePanel}

@@ -171,7 +171,43 @@ function SceneInner({ soundOn, analyser, dimmed }) {
   )
 }
 
+// Returns true only if a WebGL context can actually be created. Some browsers
+// expose WebGL APIs but fail to make a context (hardware acceleration disabled,
+// blocklisted GPU, headless, etc.) — without this check three.js would throw and,
+// unguarded, blank the whole page.
+function webglAvailable() {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+    )
+  } catch (e) {
+    return false
+  }
+}
+
+// Lightweight, dependency-free stand-in shown when WebGL isn't available (or the
+// 3D scene errors): a soft iridescent orb so the centre still feels alive.
+export function HeroFallback({ dimmed }) {
+  return (
+    <div
+      className={styles.canvas}
+      style={{
+        filter: dimmed ? 'brightness(0.35) blur(2px)' : 'none',
+        transition: 'filter 0.5s ease',
+      }}
+    >
+      <div className={styles.fallbackOrb} aria-hidden="true" />
+    </div>
+  )
+}
+
 export default function HeroScene({ soundOn, analyser, dimmed }) {
+  // Decide once on mount whether to even attempt WebGL.
+  const [glOk] = React.useState(() => webglAvailable())
+  if (!glOk) return <HeroFallback dimmed={dimmed} />
+
   return (
     <div
       className={styles.canvas}
