@@ -36,3 +36,7 @@ jobs:
           # Hostinger document root. Change if your site lives in a different folder
           # (e.g. /domains/yourdomain.com/public_html/).
           server-dir: /public_html/
+          # One-time clean upload: wipe the target and upload the build fresh, so no
+          # stale source files or partial state remain. (Can be removed later to make
+          # subsequent deploys incremental/faster.)
+          dangerous-clean-slate: true
