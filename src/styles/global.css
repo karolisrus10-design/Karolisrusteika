@@ -32,14 +32,14 @@
   --vibe-text: #F4F0EA;
 }
 
-/* LUXURY — cinematic, premium: deep blue glow + soft gold accent */
+/* LUXURY — cinematic, premium: deep blue depth + rich gold-yellow accent */
 :root[data-vibe="luxury"] {
-  --vibe-bg: #040720;
+  --vibe-bg: #050617;
   --vibe-deep: #0D1B3D;
   --vibe-edge: #020412;
-  --vibe-glow-rgb: 28, 48, 104;
-  --vibe-glow2-rgb: 40, 66, 132;
-  --vibe-accent-rgb: 198, 169, 114; /* #C6A972 gold */
+  --vibe-glow-rgb: 36, 52, 100;      /* soft blue centre for depth */
+  --vibe-glow2-rgb: 214, 176, 84;    /* warm champagne gold corners */
+  --vibe-accent-rgb: 237, 199, 74;   /* #EDC74A vivid gold-yellow */
   --vibe-text: #F5F1E8;
 }
 
